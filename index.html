@@ -11,30 +11,50 @@
     <link rel="apple-touch-icon" href="image_11.png">
     
     <style>
-        :root { --bg: #fff; --text: #111; --border: #ddd; --footer-text: #666; }
+        :root { --bg: #fff; --main: #333; --border: #ddd; --footer-text: #666; }
         @media (prefers-color-scheme: dark) {
-            :root { --bg: #111; --text: #f0f0f0; --border: #333; --footer-text: #999; }
+            :root { --bg: #111; --main: #f0f0f0; --border: #333; --footer-text: #999; }
         }
 
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); display: flex; justify-content: center; padding: 20px; margin: 0; color: var(--text); -webkit-font-smoothing: antialiased; }
-        .container { width: 100%; max-width: 380px; min-height: 95vh; display: flex; flex-direction: column; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); display: flex; justify-content: center; padding: 10px 20px; margin: 0; color: var(--main); -webkit-font-smoothing: antialiased; height: 100vh; overflow: hidden; }
+        .container { width: 100%; max-width: 380px; height: 100%; display: flex; flex-direction: column; }
         
-        h1 { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.8px; margin: 25px 0 5px; }
-        .subtitle { font-size: 0.85rem; color: var(--footer-text); margin-bottom: 25px; }
+        /* 余白を圧縮 */
+        h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.8px; margin: 10px 0 2px; }
+        .subtitle { font-size: 0.8rem; color: var(--footer-text); margin-bottom: 10px; }
 
-        #memoArea { width: 100%; flex-grow: 1; min-height: 300px; padding: 18px; border: 1px solid var(--border); border-radius: 15px; box-sizing: border-box; font-size: 18px; outline: none; transition: 0.2s; -webkit-appearance: none; resize: none; margin-bottom: 20px; line-height: 1.6; background: transparent; color: var(--text); }
-        #memoArea:focus { border-color: var(--text); }
+        /* 入力窓を最大化 */
+        #memoArea { 
+            width: 100%; 
+            flex-grow: 1; 
+            padding: 18px; 
+            border: 1px solid var(--border); 
+            border-radius: 15px; 
+            box-sizing: border-box; 
+            font-size: 18px; 
+            outline: none; 
+            transition: 0.2s; 
+            resize: none; 
+            margin-bottom: 15px; 
+            line-height: 1.6; 
+            background: transparent; 
+            color: var(--main);
+            /* iOS対策 */
+            -webkit-appearance: none;
+            -webkit-text-fill-color: var(--main);
+            opacity: 1 !important;
+        }
+        #memoArea:focus { border-color: var(--main); }
 
-        .btn-copy { width: 100%; padding: 15px; border: none; border-radius: 15px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.2s; background-color: var(--text); color: var(--bg); margin-bottom: 30px; }
+        .btn-copy { width: 100%; padding: 15px; border: none; border-radius: 15px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.2s; background-color: var(--main); color: var(--bg); margin-bottom: 15px; }
         .btn-copy:active { transform: scale(0.96); opacity: 0.8; }
 
-        /* Fridge Combo Standard Footer */
-        footer { margin-top: auto; padding: 40px 0 20px; text-align: center; font-size: 13px; color: var(--footer-text); border-top: 1px solid var(--border); }
-        .kofi-btn { display: inline-block; background: var(--text); color: var(--bg); padding: 12px 24px; border-radius: 15px; text-decoration: none; font-weight: bold; margin-bottom: 20px; transition: 0.2s; }
-        .install-btn { background: #f0f0f0; color: #111; border: none; padding: 8px 20px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 500; margin-bottom: 20px; }
-        .footer-line { line-height: 1.8; color: #999; }
+        /* フッターをコンパクトに */
+        footer { margin-top: auto; padding: 15px 0 10px; text-align: center; font-size: 12px; color: var(--footer-text); border-top: 1px solid var(--border); }
+        .kofi-btn { display: inline-block; background: var(--main); color: var(--bg); padding: 10px 20px; border-radius: 15px; text-decoration: none; font-weight: bold; margin-bottom: 10px; transition: 0.2s; }
+        .install-btn { background: #f0f0f0; color: #111; border: none; padding: 6px 15px; border-radius: 20px; font-size: 11px; cursor: pointer; font-weight: 500; margin-bottom: 10px; }
+        .footer-line { line-height: 1.5; color: #999; }
 
-        /* Unified Install Modal */
         #install-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
         .modal-content { background: white; padding: 25px; border-radius: 16px; width: 85%; max-width: 300px; position: relative; text-align: center; color: #111; }
         .btn-close-modal { position: absolute; top: 15px; right: 15px; background:none; border:none; font-size:20px; color: #999; cursor: pointer; }
@@ -46,21 +66,21 @@
 
 <div class="container">
     <h1>Simple Memo</h1>
-    <p class="subtitle">Just type. Auto-saves to your browser.</p>
+    <p class="subtitle">Just type. Auto-saves.</p>
     
     <textarea id="memoArea" placeholder="Start typing..."></textarea>
     
     <button class="btn-copy" id="copyBtn">Copy All</button>
 
     <footer>
-        <a href="https://ko-fi.com/afrorakda" target="_blank" rel="noopener" class="kofi-btn">☕ Support me on Ko-fi</a>
+        <a href="https://ko-fi.com/afrorakda" target="_blank" rel="noopener" class="kofi-btn">☕️buy me a coffee</a>
         <div>
             <button class="install-btn" onclick="showInstall()">Add to Home Screen</button>
         </div>
         <div class="footer-line">
             <div>No login / No tracking / No ads / Browser only</div>
             <div>Privacy Policy</div>
-            <div style="margin-top: 10px; font-weight: bold; color: var(--text);">Simple Memo © 2026</div>
+            <div style="margin-top: 5px; font-weight: bold; color: var(--main);">Simple Memo © 2026</div>
         </div>
     </footer>
 </div>
@@ -68,7 +88,7 @@
 <div id="install-modal" onclick="hideInstall()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <button class="btn-close-modal" onclick="hideInstall()">✕</button>
-        <h2 style="font-size: 1.2rem; margin-top:0; display: flex; align-items: center; justify-content: center; gap: 8px;">📱 Install</h2>
+        <h2 style="font-size: 1.2rem; margin-top:0;">📱 Install</h2>
         <p style="font-size: 0.85rem; color: #555; margin-bottom: 15px;">Add to your home screen.</p>
         <div style="text-align: left; font-size: 0.8rem; background: #f9f9f9; padding: 18px; border-radius: 12px;">
             <div style="margin-bottom: 12px; display: flex; align-items: start; gap: 8px;">
@@ -77,7 +97,7 @@
             </div>
             <div style="display: flex; align-items: start; gap: 8px;">
                 <span>🤖</span>
-                <div><strong>Android (Chrome):</strong><br>Tap <strong>Menu (⋮)</strong>, then <strong>Add to Home screen</strong>.</div>
+                <div><strong>Android (Chrome):</strong><br>Tap <strong>Menu (⋮)</strong>, then <strong>Add to screen</strong>.</div>
             </div>
         </div>
     </div>
@@ -88,18 +108,15 @@
 <script>
     const area = document.getElementById('memoArea');
 
-    // Auto Load & Focus
     window.onload = () => {
         area.value = localStorage.getItem('fridge_memo_data') || '';
         area.focus();
     };
 
-    // Auto Save on every input
     area.addEventListener('input', () => {
         localStorage.setItem('fridge_memo_data', area.value);
     });
 
-    // Copy Function
     document.getElementById('copyBtn').onclick = () => {
         if (!area.value) return;
         navigator.clipboard.writeText(area.value).then(() => {

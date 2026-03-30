@@ -19,11 +19,9 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); display: flex; justify-content: center; padding: 10px 20px; margin: 0; color: var(--main); -webkit-font-smoothing: antialiased; height: 100vh; overflow: hidden; }
         .container { width: 100%; max-width: 380px; height: 100%; display: flex; flex-direction: column; }
         
-        /* 余白を圧縮 */
         h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.8px; margin: 10px 0 2px; }
         .subtitle { font-size: 0.8rem; color: var(--footer-text); margin-bottom: 10px; }
 
-        /* 入力窓を最大化 */
         #memoArea { 
             width: 100%; 
             flex-grow: 1; 
@@ -35,21 +33,24 @@
             outline: none; 
             transition: 0.2s; 
             resize: none; 
-            margin-bottom: 15px; 
+            margin-bottom: 10px; 
             line-height: 1.6; 
             background: transparent; 
             color: var(--main);
-            /* iOS対策 */
             -webkit-appearance: none;
             -webkit-text-fill-color: var(--main);
             opacity: 1 !important;
         }
         #memoArea:focus { border-color: var(--main); }
 
+        /* Clear Link Style */
+        .clear-container { text-align: right; margin-bottom: 10px; }
+        #clearLink { font-size: 0.75rem; color: #999; text-decoration: underline; cursor: pointer; transition: 0.2s; }
+        #clearLink:active { color: #f44336; }
+
         .btn-copy { width: 100%; padding: 15px; border: none; border-radius: 15px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.2s; background-color: var(--main); color: var(--bg); margin-bottom: 15px; }
         .btn-copy:active { transform: scale(0.96); opacity: 0.8; }
 
-        /* フッターをコンパクトに */
         footer { margin-top: auto; padding: 15px 0 10px; text-align: center; font-size: 12px; color: var(--footer-text); border-top: 1px solid var(--border); }
         .kofi-btn { display: inline-block; background: var(--main); color: var(--bg); padding: 10px 20px; border-radius: 15px; text-decoration: none; font-weight: bold; margin-bottom: 10px; transition: 0.2s; }
         .install-btn { background: #f0f0f0; color: #111; border: none; padding: 6px 15px; border-radius: 20px; font-size: 11px; cursor: pointer; font-weight: 500; margin-bottom: 10px; }
@@ -69,6 +70,10 @@
     <p class="subtitle">Just type. Auto-saves.</p>
     
     <textarea id="memoArea" placeholder="Start typing..."></textarea>
+    
+    <div class="clear-container">
+        <span id="clearLink">Clear All</span>
+    </div>
     
     <button class="btn-copy" id="copyBtn">Copy All</button>
 
@@ -116,6 +121,16 @@
     area.addEventListener('input', () => {
         localStorage.setItem('fridge_memo_data', area.value);
     });
+
+    // Clear Function
+    document.getElementById('clearLink').onclick = () => {
+        if (!area.value) return;
+        if (confirm('Clear all text?')) {
+            area.value = '';
+            localStorage.setItem('fridge_memo_data', '');
+            area.focus();
+        }
+    };
 
     document.getElementById('copyBtn').onclick = () => {
         if (!area.value) return;

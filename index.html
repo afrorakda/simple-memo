@@ -25,70 +25,77 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             background-color: var(--bg); display: flex; justify-content: center; 
             padding: 0; margin: 0; color: var(--main); -webkit-font-smoothing: antialiased; 
+            height: 100vh; overflow: hidden;
         }
 
         .container { 
-            width: 100%; max-width: 380px; min-height: 100vh; 
+            width: 100%; max-width: 380px; height: 100vh; 
             display: flex; flex-direction: column; position: relative; 
             padding: 20px; box-sizing: border-box; 
         }
 
-        /* メインユニット：中央よりやや下へ配置 */
         .main-unit {
-            margin-top: 8vh;
-            margin-bottom: auto; 
-            width: 100%;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
+            width: 100%;
         }
         
         header { 
-            display: flex; justify-content: space-between; align-items: start; 
-            margin-bottom: 20px; 
+            display: flex; justify-content: space-between; align-items: flex-end; 
+            margin-bottom: 10px; padding-top: 10px;
         }
-        .title-group h1 { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.8px; margin: 0; }
-        .subtitle { font-size: 0.8rem; color: #777; font-weight: 500; margin-top: 4px; }
+        .title-group h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.8px; margin: 0; line-height: 1; }
+        .subtitle { font-size: 0.75rem; color: #888; font-weight: 600; margin-top: 4px; }
 
         .hub-link { 
             text-decoration: none; font-size: 0.7rem; font-weight: 800; color: #999; 
-            background: transparent; border: 1px solid #ddd; padding: 4px 8px; border-radius: 10px; 
-            transition: 0.2s; cursor: pointer;
+            background: transparent; border: 1px solid #ddd; padding: 3px 8px; border-radius: 10px; 
+            transition: 0.2s; cursor: pointer; margin-bottom: 2px;
         }
         .hub-link:active { transform: scale(0.95); background: var(--accent); color: var(--main); }
 
-        /* テキストエリア：等幅フォント & iOS対策 */
+        /* 入力エリア最大化 & フラッシュ演出用アニメーション */
+        .memo-container { position: relative; flex-grow: 1; width: 100%; margin-bottom: 15px; }
+        
         textarea { 
-            width: 100%; height: 280px; padding: 16px; border: 2px solid var(--accent); border-radius: var(--radius); 
-            box-sizing: border-box; font-size: 18px; outline: none; transition: 0.2s; 
-            font-weight: 600; background: var(--input-bg);
-            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Monaco, Consolas, monospace;
+            width: 100%; height: 100%; padding: 18px; border: 2px solid var(--accent); border-radius: var(--radius); 
+            box-sizing: border-box; font-size: 18px; outline: none; transition: background 0.2s, border-color 0.2s; 
+            font-weight: 500; background: var(--input-bg);
             line-height: 1.6; resize: none;
             -webkit-appearance: none; -webkit-text-fill-color: #333; opacity: 1 !important;
             user-select: auto !important; -webkit-user-select: auto !important; 
         }
         textarea:focus { border-color: var(--main); background: #fff; }
-        textarea::placeholder { color: #ccc; -webkit-text-fill-color: #ccc; font-family: -apple-system, sans-serif; }
+        textarea.flash { background: #fff !important; border-color: #aaa !important; transition: none; }
 
-        .action-row { display: flex; justify-content: flex-end; margin-top: 8px; margin-bottom: 12px; }
-        .btn-clear-text { font-size: 0.75rem; font-weight: 800; color: #bbb; cursor: pointer; text-decoration: underline; }
-        .btn-clear-text:active { color: #e63946; }
+        /* クリアボタン：視認性を上げつつ邪魔にならない配置 */
+        .btn-clear-wrapper { position: absolute; right: 12px; bottom: 12px; display: none; }
+        .btn-clear-wrapper.show { display: block; }
+        .btn-clear {
+            width: 28px; height: 28px; background: rgba(0,0,0,0.1); color: #666; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .btn-clear:active { background: #e63946; color: #fff; transform: scale(0.9); }
 
+        /* コピーボタン：存在感を抑えたデザイン */
+        .copy-btn-area { width: 100%; margin-bottom: 15px; }
         .main-btn { 
-            width: 100%; padding: 18px; background-color: var(--main); color: #fff; 
-            border: none; border-radius: var(--radius); font-size: 1rem; font-weight: 800; 
+            width: 100%; padding: 14px; background-color: var(--accent); color: var(--main); 
+            border: none; border-radius: var(--radius); font-size: 0.95rem; font-weight: 800; 
             cursor: pointer; transition: 0.2s; -webkit-appearance: none;
         }
-        .main-btn:active { transform: scale(0.97); opacity: 0.8; }
-        .main-btn.copied { background-color: #666; }
+        .main-btn:active { background-color: #ddd; transform: scale(0.98); }
 
         /* 鉄壁フッター */
-        footer { margin-top: auto; padding: 20px 0 30px; text-align: center; border-top: 1px solid #f5f5f5; font-size: 11px; color: #666; font-weight: 600; }
-        .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        footer { padding: 15px 0 25px; text-align: center; border-top: 1px solid #f5f5f5; font-size: 11px; color: #666; font-weight: 600; }
+        .footer-btns { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
         
         .outline-btn { 
             background: #fff; color: var(--main); border: 2px solid var(--main); 
-            padding: 12px; border-radius: var(--radius); text-decoration: none; 
-            font-weight: 800; font-size: 13px; display: flex; align-items: center; 
+            padding: 10px; border-radius: var(--radius); text-decoration: none; 
+            font-weight: 800; font-size: 12px; display: flex; align-items: center; 
             justify-content: center; cursor: pointer; transition: 0.2s;
         }
         .outline-btn:active { background: var(--accent); transform: scale(0.97); }
@@ -99,8 +106,6 @@
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 1000; }
         .modal-content { background: #fff; width: 85%; max-width: 340px; padding: 30px; border-radius: var(--radius); position: relative; text-align: left; }
         .close-x { position: absolute; top: 15px; right: 20px; font-size: 24px; color: #888; cursor: pointer; }
-
-        #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 10px 20px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; display: none; z-index: 1001; pointer-events: none; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -115,13 +120,16 @@
             <a href="https://afrorakda.github.io/" class="hub-link">🏠 Hub</a>
         </header>
         
-        <textarea id="memoArea" placeholder="Start typing..."></textarea>
-        
-        <div class="action-row">
-            <span class="btn-clear-text" onclick="clearMemo()">Clear All</span>
+        <div class="memo-container">
+            <textarea id="memoArea" placeholder="Start typing..."></textarea>
+            <div id="clearWrapper" class="btn-clear-wrapper">
+                <div class="btn-clear" onclick="clearMemo()">×</div>
+            </div>
         </div>
         
-        <button class="main-btn" id="copyBtn" onclick="copyMemo()">Copy to Clipboard</button>
+        <div class="copy-btn-area">
+            <button class="main-btn" id="copyBtn" onclick="copyMemo()">Copy to Clipboard</button>
+        </div>
     </div>
 
     <footer id="dynamic-footer">
@@ -147,33 +155,35 @@
     </div>
 </div>
 
-<div id="toast">Copied!</div>
-
 <script>
     const area = document.getElementById('memoArea');
+    const clearWrapper = document.getElementById('clearWrapper');
 
-    // Load & Auto-focus
+    // Load & Initial View
     window.onload = () => {
-        area.value = localStorage.getItem('fridge_memo_data') || '';
+        const saved = localStorage.getItem('fridge_memo_data') || '';
+        area.value = saved;
+        toggleClearBtn(saved);
         area.focus();
     };
 
-    // Auto-save
+    // Auto-save & Toggle Clear Button
     area.addEventListener('input', () => {
         localStorage.setItem('fridge_memo_data', area.value);
+        toggleClearBtn(area.value);
     });
+
+    function toggleClearBtn(val) {
+        if (val.length > 0) clearWrapper.classList.add('show');
+        else clearWrapper.classList.remove('show');
+    }
 
     function copyMemo() {
         if (!area.value) return;
-        const btn = document.getElementById('copyBtn');
         navigator.clipboard.writeText(area.value).then(() => {
-            const t = document.getElementById('toast');
-            t.style.display = 'block';
-            btn.classList.add('copied');
-            setTimeout(() => {
-                t.style.display = 'none';
-                btn.classList.remove('copied');
-            }, 1500);
+            // フラッシュ演出
+            area.classList.add('flash');
+            setTimeout(() => area.classList.remove('flash'), 150);
         });
     }
 
@@ -182,6 +192,7 @@
         if (confirm('Clear all text?')) {
             area.value = '';
             localStorage.setItem('fridge_memo_data', '');
+            toggleClearBtn('');
             area.focus();
         }
     }
